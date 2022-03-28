@@ -9,7 +9,7 @@ between the two variables.
 import pandas as pd
 import matplotlib.pyplot as plt
 
-#====================================================================
+#===============================================================================
 def makePlot(x,y,title,xLab,yLab):
     """
     Overview: Make a plot of x vs y
@@ -22,4 +22,4 @@ def makePlot(x,y,title,xLab,yLab):
     plt.ylim(min(y),max(y))
     plt.grid()
     plt.show()
-#====================================================================
+#===============================================================================
