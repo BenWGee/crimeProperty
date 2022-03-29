@@ -6,7 +6,7 @@ further analysis.
 """
 
 import operator
-import pandas as import pd
+import pandas as pd
 import sys, os, logging, datetime, time
 from logging.handlers import RotatingFileHandler
 
@@ -58,7 +58,7 @@ def readFile(filename,extension):
         logger.info("Succesfully read " + file)
         df =  pd.read_csv(filename)
     elif extension == "xlsx":
-        df =  pd.read_xlsx(filename)
+        df =  pd.read_excel(filename)
     else:
         logger.critical(filename + " cannot be read as it is of type " + extension)
         return
@@ -74,7 +74,7 @@ def dropColumns(df,cols,removeCols):
     if removeCols == True:
         dfDrop =  df.drop(cols, axis = 1)
     elif removeCols == False:
-        dfDrop = df.drop(df.columns.differnce(cols), axis = 1,inplace = True)
+        dfDrop = df.filter(cols, axis=1)
     else:
         logger.error("Could not remove columns")
         return
@@ -87,19 +87,19 @@ def dropRows(df,col,value,opChar,removeRows):
     @overview: Drop unwanted rows based on some condition.
     Return pandas dataframe
     """
-    ops = {
-        ">": operator.gt,
-        ">=": operator.ge,
-        "<": operator.lt,
-        "<=": operator.le,
-        "=": operator.eq,
-        "!=": operator.ne
-    }
-
     if removeRows == True:
-        dfDrop =  df.drop(ops[opChar](df[col],value))
-        logger.info("Succesfully dropped rows")
-    else
+        if opChar == ">":
+            dfDrop =  df.drop(df[col] > value)
+            logger.info("Succesfully dropped rows")
+        elif opChar == "<":
+            dfDrop =  df.drop(df[col] < value)
+            logger.info("Succesfully dropped rows")
+        elif opChar == "<":
+            dfDrop =  df.drop(df[col] == value)
+            logger.info("Succesfully dropped rows")
+        else:
+            logger.error("Could not drop rows")
+    else:
         logger.error("Could not remove rows")
         return
     return dfDrop
@@ -112,27 +112,27 @@ def saveFile(df,saveTo,type):
     Return nothing
     """
     if type == "csv":
-        pd.to_csv(saveTo)
+        df.to_csv(saveTo)
         logger.info("File saved")
     elif type == "excel":
-        pd.to_excel(saveTo)
+        df.to_excel(saveTo)
         logger.info("File saved")
     else:
         logger.error("Could not save file")
 #===============================================================================
 
-file = "scotch_review2020.csv"
-badColumns = ["price","review"]
+file = "propertyData.xlsx"
+badColumns = ["price","longitude","latitude"]
 removeCols = False
 removeRows = True
-compareCol = "Currency"
-value = "£"
-operator = "="
+#compareCol = "Currency"
+#value = "2019"
+#operator = ">"
 path = ""
-filename = "scotchCondensed.csv"
-tpye = "csv"
+filename = "propertyDataCondensed.csv"
+type = "csv"
 
 df = readFile(file,str(file.split(".")[1]))
-df = dropRows(df,compareCol,value,operator,removeRows)
+#df = dropRows(df,compareCol,value,operator,removeRows)
 df = dropColumns(df,badColumns,removeCols)
-saveFile(df,path,filename,type)
+saveFile(df,filename,type)
