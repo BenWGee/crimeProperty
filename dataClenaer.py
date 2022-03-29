@@ -121,9 +121,18 @@ def saveFile(df,saveTo,type):
         logger.error("Could not save file")
 #===============================================================================
 
-files = ["priceOfCrime.csv"]
-badColumns = ["",""]
-df = readFile(f)
-df = dropColumns(df,columns,removeCols)
-df = dropRows(df,column,value,operator,removeRows)
+file = "scotch_review2020.csv"
+badColumns = ["price","review"]
+removeCols = False
+removeRows = True
+compareCol = "Currency"
+value = "£"
+operator = "="
+path = ""
+filename = "scotchCondensed.csv"
+tpye = "csv"
+
+df = readFile(file,str(file.split(".")[1]))
+df = dropRows(df,compareCol,value,operator,removeRows)
+df = dropColumns(df,badColumns,removeCols)
 saveFile(df,path,filename,type)
