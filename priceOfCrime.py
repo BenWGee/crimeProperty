@@ -55,7 +55,7 @@ for indexH, h in houses.iterrows():
 
 houses["CrimeArea"] = crimesInArea
 houses.to_csv("houseAndCrimes.csv")
-title = "Plot of Crimes Within 100m VS Property Price"
-xLab = "Number of Crimes Within 100m"
-yLab = "Property Price"
-makePlot(list(houses["CrimeArea"]),list(houses["price"]),title,xLab,yLab)
+#title = "Plot of Crimes Within 100m VS Property Price"
+#xLab = "Number of Crimes Within 100m"
+#yLab = "Property Price"
+#makePlot(list(houses["CrimeArea"]),list(houses["price"]),title,xLab,yLab)
