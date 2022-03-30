@@ -39,23 +39,35 @@ def dist(lon1,lat1,lon2,lat2):
 crimes = pd.read_csv("Crime_Baltimore.csv")
 crimeLoc = crimes.filter(["Longitude","Latitude"], axis=1)
 houses = pd.read_csv("propertyDataCondensed.csv")
-radius = 0.1
-crimesInArea = []
+radius1 = 0.1
+radius2 = 0.5
+radius3 = 1.0
+crimeInR1 = []
+crimeInR2 = []
+crimeInR3 = []
 
 for indexH, h in houses.iterrows():
     print(indexH)
-    count = 0
-
+    countR1 = 0
+    countR2 = 0
+    countR3 = 0
     for indexC, c in crimes.iterrows():
         dis = dist(h["longitude"],h["latitude"],c["Longitude"],c["Latitude"])
-        if dis <= radius:
-            count += 1
-    crimesInArea.append(count)
+        if dis <= radius3:
+            countR3 += 1
+            countR2 += 1
+            countR1 += 1
+        elif dis <= radius2:
+            countR2 += 1
+            countR1 += 1
+        elif dis <= radius1:
+            countR1 += 1
+    crimesInR3.append(countR3)
+    crimesInR2.append(countR2)
+    crimesInR1.append(countR1)
 
 
-houses["CrimeArea"] = crimesInArea
+houses["Crime 100m"] = crimesInR1
+houses["Crime 500m"] = crimesInR2
+houses["Crime 1000m"] = crimesInR3
 houses.to_csv("houseAndCrimes.csv")
-#title = "Plot of Crimes Within 100m VS Property Price"
-#xLab = "Number of Crimes Within 100m"
-#yLab = "Property Price"
-#makePlot(list(houses["CrimeArea"]),list(houses["price"]),title,xLab,yLab)
